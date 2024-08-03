@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "bootlaod.h": "c",
+        "stdio.h": "c"
+    }
+}
