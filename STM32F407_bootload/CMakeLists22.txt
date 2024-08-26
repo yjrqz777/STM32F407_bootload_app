@@ -1,0 +1,101 @@
+cmake_minimum_required(VERSION 3.10)  
+  
+# 项目名称  
+project(test_f407_bootload)  
+  
+# 设置编译选项  
+set(CMAKE_BUILD_TYPE Debug)  
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Og -g -gdwarf-2 -Wall -fdata-sections -ffunction-sections")  
+set(CMAKE_C_FLAGS_RELEASE "-O2 -Wall -fdata-sections -ffunction-sections")  
+  
+# 设置编译器和工具链  
+set(CMAKE_C_COMPILER arm-none-eabi-gcc)  
+set(CMAKE_OBJCOPY arm-none-eabi-objcopy)  
+set(CMAKE_SIZE arm-none-eabi-size)  
+  
+# 源代码目录  
+set(CORE_SRC_DIR Core/Src)  
+set(DRIVERS_SRC_DIR Drivers/STM32F4xx_HAL_Driver/Src)  
+  
+# 包含目录  
+include_directories(  
+    ${CORE_SRC_DIR}  
+    ${CORE_SRC_DIR}/Inc  
+    ${DRIVERS_SRC_DIR}  
+    ${DRIVERS_SRC_DIR}/Inc  
+    ${DRIVERS_SRC_DIR}/Inc/Legacy  
+    ${CMAKE_SOURCE_DIR}/Drivers/CMSIS/Device/ST/STM32F4xx/Include  
+    ${CMAKE_SOURCE_DIR}/Drivers/CMSIS/Include  
+)  
+  
+# 源文件  
+set(C_SOURCES  
+    ${CORE_SRC_DIR}/main.c  
+    ${CORE_SRC_DIR}/gpio.c  
+    ${CORE_SRC_DIR}/stm32f4xx_it.c  
+    ${CORE_SRC_DIR}/stm32f4xx_hal_msp.c  
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_tim.c  
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_tim_ex.c  
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_rcc.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_rcc_ex.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_flash.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_flash_ex.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_flash_ramfunc.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_gpio.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_dma_ex.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_dma.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_pwr.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_pwr_ex.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_cortex.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_exti.c 
+    ${CORE_SRC_DIR}/system_stm32f4xx.c 
+    ${CORE_SRC_DIR}/sysmem.c 
+    ${CORE_SRC_DIR}/syscalls.c 
+    ${CORE_SRC_DIR}/usart.c 
+    ${DRIVERS_SRC_DIR}/stm32f4xx_hal_uart.c
+)  
+  
+set(ASM_SOURCES  
+    startup_stm32f407xx.s  
+)  
+  
+# 编译器和链接器标志  
+set(CPU_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")  
+set(LDFLAGS "${CPU_FLAGS} -specs=nano.specs -TSTM32F407VETx_FLASH.ld -Wl,-Map=${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map,--cref -Wl,--gc-sections")  
+  
+# 创建对象列表  
+set(C_OBJECTS "")  
+foreach(src ${C_SOURCES})  
+    get_filename_component(name ${src} NAME_WE)  
+    list(APPEND C_OBJECTS ${CMAKE_BINARY_DIR}/${name}.o)  
+endforeach()  
+  
+set(ASM_OBJECTS "")  
+foreach(src ${ASM_SOURCES})  
+    get_filename_component(name ${src} NAME_WE)  
+    list(APPEND ASM_OBJECTS ${CMAKE_BINARY_DIR}/${name}.o)  
+endforeach()  
+  
+# 添加可执行文件  
+add_executable(${CMAKE_PROJECT_NAME}.elf ${C_SOURCES} ${ASM_SOURCES})  
+  
+# 设置编译器和链接器标志  
+set_target_properties(${CMAKE_PROJECT_NAME}.elf PROPERTIES  
+    COMPILE_FLAGS "${CPU_FLAGS} -DUSE_HAL_DRIVER -DSTM32F407xx -DUSER_VECT_TAB_ADDRESS -MMD -MP"  
+    LINK_FLAGS "${LDFLAGS}"  
+)  
+  
+# 创建HEX和BIN文件  
+add_custom_command(  
+    TARGET ${CMAKE_PROJECT_NAME}.elf  
+    POST_BUILD  
+    COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET> ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.hex  
+    COMMAND ${CMAKE_OBJCOPY} -O binary -S $<TARGET> ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.bin  
+)  
+  
+# 确保构建目录存在  
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR})  
+  
+# 依赖关系  
+# CMake会自动处理依赖关系，但如果你需要特殊的依赖文件处理，可以在这里添加
