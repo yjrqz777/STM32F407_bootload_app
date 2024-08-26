@@ -82,7 +82,7 @@ add_custom_command(
 add_custom_target(hex_target ALL DEPENDS ${CMAKE_PROJECT_NAME}.hex)  
 
 
-add_custom_target(copy_files ALL
-    COMMAND cp ${CMAKE_PROJECT_NAME}.hex /mnt/e/A_Hex/stm32hex
-    COMMENT "cp ${CMAKE_PROJECT_NAME}.hex到/mnt/e/A_Hex/stm32hex"
-)
+# add_custom_target(copy_files ALL
+#     COMMAND cp ${CMAKE_PROJECT_NAME}.hex /mnt/e/A_Hex/stm32hex
+#     COMMENT "cp ${CMAKE_PROJECT_NAME}.hex到/mnt/e/A_Hex/stm32hex"
+# )

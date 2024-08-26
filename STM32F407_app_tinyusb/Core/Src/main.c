@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "fatfs.h"
+#include "sdio.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
@@ -32,7 +34,7 @@
 /* USER CODE BEGIN PTD */
 int _write(int fd, char *ptr, int len)
 {
-    HAL_UART_Transmit(&huart3, (uint8_t*)ptr, len, 0xFFFF); //huart是对应串口
+    HAL_UART_Transmit(&huart3, (uint8_t*)ptr, len, 0xFFFF); //huart是对应串�?
     return len;
 }
 /* USER CODE END PTD */
@@ -95,6 +97,8 @@ int main(void)
   MX_GPIO_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_USART3_UART_Init();
+  MX_SDIO_SD_Init();
+  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */

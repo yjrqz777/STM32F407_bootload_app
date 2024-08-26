@@ -24,7 +24,7 @@
 //UART.c
 unsigned char UART1_Rx_Buf[MAX_REC_LENGTH] = {0}; //USART1存储接收数据
 unsigned char UART1_Rx_flg = 0;                   //USART1接收完成标志
-unsigned int  UART1_Rx_cnt = 0;                   //USART1接受数据计数器
+unsigned int  UART1_Rx_cnt = 0;                   //USART1接受数据计数�?
 unsigned char UART1_temp[REC_LENGTH] = {0};       //USART1接收数据缓存
 
 
@@ -123,8 +123,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 /* USER CODE BEGIN 1 */
 /**
   * @brief 串口中断回调函数
-  * @param 调用回调函数的串口
-  * @note  串口每次收到数据以后都会关闭中断，如需重复使用，必须再次开启
+  * @param 调用回调函数的串
+  * @note  串口每次收到数据以后都会关闭中断，如�?重复使用，必须再次开
   * @retval None
   */  
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
