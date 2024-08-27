@@ -20,10 +20,13 @@ target_include_directories(${mode_name} INTERFACE
 )
 
 target_sources(${mode_name} INTERFACE
-    ./code.c
-    ./usb_descriptors.c
+    # ./code.c
+    # ./usb_descriptors.c
+    ./code_msc.c
+    ./usb_descriptors_msc.c
     ./msc_disk.c
     ./dcd_dwc2.c
+    # ./family.c
 )
 
 target_link_directories(${mode_name} INTERFACE

@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "fatfs.h"
 #include "sdio.h"
 #include "usart.h"
@@ -34,7 +35,8 @@
 /* USER CODE BEGIN PTD */
 int _write(int fd, char *ptr, int len)
 {
-    HAL_UART_Transmit(&huart3, (uint8_t*)ptr, len, 0xFFFF); //huart是对应串�?
+    // HAL_UART_Transmit(&huart3, (uint8_t*)ptr, len, 0xFFFF); //huart是对应串
+    HAL_UART_Transmit_DMA(&huart3, (uint8_t *)ptr, len);
     return len;
 }
 /* USER CODE END PTD */
@@ -95,6 +97,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_USART3_UART_Init();
   MX_SDIO_SD_Init();

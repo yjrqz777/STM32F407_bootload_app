@@ -5,7 +5,7 @@
 #include "usart.h"
 
 typedef  void (*pFunction)(void);
-#define APPLICATION_ADDRESS   (uint32_t)0x08008000 
+
 
 
 #endif 

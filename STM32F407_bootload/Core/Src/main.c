@@ -67,11 +67,11 @@ pFunction JumpToApplication;
 uint32_t JumpAddress;
 uint32_t FlashProtection = 0;
 
-
+#define APPLICATION_ADDRESS   (uint32_t)0x08004000 
 
 void RunApp(void)
 {
-	printf("Start program execution......\r\n\n");
+	printf("Start program execution22......\r\n\n");
     /* execute the new program */
     JumpAddress = *(__IO uint32_t*) (APPLICATION_ADDRESS + 4);
     /* Jump to user application */
@@ -122,7 +122,7 @@ int main(void)
   HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_2);HAL_Delay(200);
   printf("222\n");
   HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_2);HAL_Delay(200);
-  printf("1111\n");
+  printf("111\n");
   HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_2);HAL_Delay(200);
     RunApp();
   /* USER CODE END 2 */

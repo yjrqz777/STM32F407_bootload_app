@@ -37,9 +37,9 @@
 #define LED_STATE_ON          1
 
 // // Button
-// #define BUTTON_PORT           GPIOA
-// #define BUTTON_PIN            GPIO_PIN_0
-// #define BUTTON_STATE_ACTIVE   1
+#define BUTTON_PORT           GPIOA
+#define BUTTON_PIN            GPIO_PIN_0
+#define BUTTON_STATE_ACTIVE   1
 
 // // Enable PA2 as the debug log UART
 // // It is not routed to the ST/Link on the Discovery board.

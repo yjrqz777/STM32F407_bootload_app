@@ -25,19 +25,19 @@
  */
 
 #include "stm32f4xx_hal.h"
-#include "bsp/board_api.h"
+#include "board_api.h"
 #include "board.h"
 
 //--------------------------------------------------------------------+
 // Forward USB interrupt events to TinyUSB IRQ Handler
 //--------------------------------------------------------------------+
-void OTG_FS_IRQHandler(void) {
-  tud_int_handler(0);
-}
+// void OTG_FS_IRQHandler(void) {
+//   tud_int_handler(0);
+// }
 
-void OTG_HS_IRQHandler(void) {
-  tud_int_handler(1);
-}
+// void OTG_HS_IRQHandler(void) {
+//   tud_int_handler(1);
+// }
 
 //--------------------------------------------------------------------+
 // MACRO TYPEDEF CONSTANT ENUM
@@ -173,10 +173,10 @@ void board_init(void) {
 // Board porting API
 //--------------------------------------------------------------------+
 
-void board_led_write(bool state) {
-  GPIO_PinState pin_state = (GPIO_PinState) (state ? LED_STATE_ON : (1 - LED_STATE_ON));
-  HAL_GPIO_WritePin(LED_PORT, LED_PIN, pin_state);
-}
+// void board_led_write(bool state) {
+//   GPIO_PinState pin_state = (GPIO_PinState) (state ? LED_STATE_ON : (1 - LED_STATE_ON));
+//   HAL_GPIO_WritePin(LED_PORT, LED_PIN, pin_state);
+// }
 
 uint32_t board_button_read(void) {
   return BUTTON_STATE_ACTIVE == HAL_GPIO_ReadPin(BUTTON_PORT, BUTTON_PIN);
@@ -211,25 +211,25 @@ int board_uart_write(void const *buf, int len) {
 #endif
 }
 
-#if CFG_TUSB_OS == OPT_OS_NONE
-volatile uint32_t system_ticks = 0;
+// #if CFG_TUSB_OS == OPT_OS_NONE
+// volatile uint32_t system_ticks = 0;
 
-void SysTick_Handler(void) {
-  HAL_IncTick();
-  system_ticks++;
-}
+// void SysTick_Handler(void) {
+//   HAL_IncTick();
+//   system_ticks++;
+// }
 
-uint32_t board_millis(void) {
-  return system_ticks;
-}
+// uint32_t board_millis(void) {
+//   return system_ticks;
+// }
 
-#endif
+// #endif
 
-void HardFault_Handler(void) {
-  __asm("BKPT #0\n");
-}
+// void HardFault_Handler(void) {
+//   __asm("BKPT #0\n");
+// }
 
 // Required by __libc_init_array in startup code if we are compiling using
 // -nostdlib/-nostartfiles.
-void _init(void) {
-}
+// void _init(void) {
+// }

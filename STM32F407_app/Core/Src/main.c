@@ -57,6 +57,25 @@ int _write(int fd, char *ptr, int len)
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
+typedef  void (*pFunction)(void);
+
+pFunction JumpToApplication;
+uint32_t JumpAddress;
+uint32_t FlashProtection = 0;
+
+#define APPLICATION_ADDRESS   (uint32_t)0x08000000 
+
+void RunApp(void)
+{
+	printf("Start program execution22......\r\n\n");
+    /* execute the new program */
+    JumpAddress = *(__IO uint32_t*) (APPLICATION_ADDRESS + 4);
+    /* Jump to user application */
+    JumpToApplication = (pFunction) JumpAddress;
+    /* Initialize user application's Stack Pointer */
+    __set_MSP(*(__IO uint32_t*) APPLICATION_ADDRESS);
+    JumpToApplication();
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -95,9 +114,10 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  RunApp();
   /* USER CODE END 2 */
   printf("IN app\n");
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)

@@ -56,8 +56,9 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern DMA_HandleTypeDef hdma_usart3_rx;
+extern DMA_HandleTypeDef hdma_usart3_tx;
 extern UART_HandleTypeDef huart3;
-extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -205,30 +206,57 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles DMA1 stream1 global interrupt.
+  */
+void DMA1_Stream1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream1_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart3_rx);
+  /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 stream3 global interrupt.
+  */
+void DMA1_Stream3_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream3_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream3_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart3_tx);
+  /* USER CODE BEGIN DMA1_Stream3_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream3_IRQn 1 */
+}
+
+/**
   * @brief This function handles USART3 global interrupt.
   */
 void USART3_IRQHandler(void)
 {
   /* USER CODE BEGIN USART3_IRQn 0 */
-
+    if(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_IDLE) != RESET)    
+    /*判断�?空闲�?�?标志�?,要注意的�?这个�?句不要写到HAL_UART_RxCpltCallback函数�?，因为HAL_UART_RxCpltCallback�?�?接收回调函数，不�?接收的情况下�?不会调用的，如果写到HAL_UART_RxCpltCallback�?永远也�?�理不了空闲�?�?*/
+    {
+        __HAL_UART_CLEAR_IDLEFLAG(&huart3);		//清除IDLE标志�?
+        UART1_Rx_flg = 1;                                            //接收标志�?1，表示收到了�?帧数�?
+    }
+    // else
+    // {
+    //     UART1_Rx_flg = 0;
+    // }
+    
   /* USER CODE END USART3_IRQn 0 */
   HAL_UART_IRQHandler(&huart3);
   /* USER CODE BEGIN USART3_IRQn 1 */
 
-  /* USER CODE END USART3_IRQn 1 */
-}
 
-/**
-  * @brief This function handles USB On The Go FS global interrupt.
-  */
-void OTG_FS_IRQHandler(void)
-{
-  /* USER CODE BEGIN OTG_FS_IRQn 0 */
-  cdc_OTG_FS_IRQHandler();
-  /* USER CODE END OTG_FS_IRQn 0 */
-  // HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
-  /* USER CODE BEGIN OTG_FS_IRQn 1 */
-  /* USER CODE END OTG_FS_IRQn 1 */
+
+  /* USER CODE END USART3_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
